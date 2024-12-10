@@ -218,12 +218,29 @@ def aggregate_df(df, params):
     """
     Reads the dataframe output by the previous function and returns average detection scores for each transformation
     """
+    # 确保 param0 中的空值填充为 -1
     df['param0'] = df['param0'].fillna(-1)
-    df_mean = df.groupby(['attack','param0'], as_index=False).mean().drop(columns='img')
-    df_agg = df.groupby(['attack','param0'], as_index=False).agg(['mean','min','max','std']).drop(columns='img')
 
-    if params.verbose>0:
-        print('\n%s'%df_mean)
-        print('\n%s'%df_agg)
+    # 筛选数值列
+    numeric_cols = df.select_dtypes(include=[float, int]).columns
+
+    # 计算均值，只针对数值列
+    df_mean = (
+        df[numeric_cols]
+        .groupby([df['attack'], df['param0']], as_index=False)
+        .mean()
+    )
+
+    # 计算统计信息（mean, min, max, std），仅针对数值列
+    df_agg = (
+        df[numeric_cols]
+        .groupby([df['attack'], df['param0']], as_index=False)
+        .agg(['mean', 'min', 'max', 'std'])
+    )
+
+    # 打印调试信息
+    if params.verbose > 0:
+        print("\nMean:\n%s" % df_mean)
+        print("\nAggregated statistics:\n%s" % df_agg)
+
     return df_agg
-
