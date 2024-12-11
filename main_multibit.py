@@ -110,7 +110,7 @@ def main(params):
             os.makedirs(params.output_dir, exist_ok=True)
         df = evaluate.decode_multibit_from_folder(params.data_dir, carrier, model, params.msg_type)
         df_path = os.path.join(params.output_dir,'decodings.csv')
-        df.to_csv(df_path, index=False)
+        df.to_csv(df_path, index=False, escapechar='\\')
         if params.verbose > 0:
             print('Results saved in %s'%df_path)
 
