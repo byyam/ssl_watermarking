@@ -105,7 +105,9 @@ def evaluate_0bit_on_attacks(imgs, carrier, angle, model, params, attacks=attack
         if ii==0 and save:
             imgs_dir = os.path.join(params.output_dir, 'imgs')
             for jj in range(len(attacks)):
-                attacked_imgs[jj].save(os.path.join(imgs_dir,"%i_%s.png"%(ii, str(attacks[jj])) ))
+                attack_str = '_'.join(f"{key}_{value}" for key, value in attacks[jj].items())
+                file_name = f"{ii}_{attack_str}.png"
+                attacked_imgs[jj].save(os.path.join(imgs_dir, file_name))
 
         decoded_data = decode.decode_0bit(attacked_imgs, carrier, angle, model)
         for jj in range(len(attacks)):
@@ -182,7 +184,9 @@ def evaluate_multibit_on_attacks(imgs, carrier, model, msgs_orig, params, attack
         if ii==0 and save:
             imgs_dir = os.path.join(params.output_dir, 'imgs')
             for jj in range(len(attacks)):
-                attacked_imgs[jj].save(os.path.join(imgs_dir,"%i_%s.png"%(ii, str(attacks[jj])) ))
+                attack_str = '_'.join(f"{key}_{value}" for key, value in attacks[jj].items())
+                file_name = f"{ii}_{attack_str}.png"
+                attacked_imgs[jj].save(os.path.join(imgs_dir, file_name))
 
         decoded_data = decode.decode_multibit(attacked_imgs, carrier, model)
         for jj in range(len(attacks)):
